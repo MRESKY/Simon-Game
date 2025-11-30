@@ -3,21 +3,24 @@ class Game {
         this.gamePattern = [];
         this.userClickedPattern = [];
         this.gameover = false;
+        this.gameStarted = false;
         this.buttonColors = ["red", "blue", "green", "yellow"];
         this.init();
     }
     init() {
 
     document.addEventListener("keydown", (e) => {
-        if (e.key === "a" || e.key === "A") {
-            this.nextSequence();
+        if ((e.key === "a" || e.key === "A") && !this.gameStarted) {
+            this.startGame();
         }
     });
 
+    // Touch start untuk memulai game (hanya sekali)
     document.addEventListener("touchstart", (e) => {
-        this.nextSequence();
-
-        e.preventDefault();
+        if (!this.gameStarted && e.target.tagName !== 'BUTTON') {
+            this.startGame();
+            e.preventDefault();
+        }
     }, { passive: false });
 
 
@@ -31,7 +34,14 @@ class Game {
             this.checkAnswer(this.userClickedPattern.length - 1);
         });
     });
-    }   
+    }
+
+    startGame() {
+        if (this.gameStarted) return;
+        this.gameStarted = true;
+        document.getElementsByTagName("h1")[0].textContent = "Game Started!";
+        this.nextSequence();
+    }
     
     nextSequence() {
         this.userClickedPattern = [];
@@ -84,12 +94,12 @@ class Game {
         this.gamePattern = [];
         this.userClickedPattern = [];
         this.gameover = false;
+        this.gameStarted = false;
 
-        document.getElementsByTagName("h1")[0].textContent = "Game Started!";
+        document.getElementsByTagName("h1")[0].textContent = "Touch Screen or Press A to Start";
 
         document.removeEventListener("keydown", this.restartHandler);
-
-        this.nextSequence();
+        document.removeEventListener("touchstart", this.restartHandler);
     }
 }
 

@@ -30,6 +30,7 @@ You can play the game live at: [Live Demo Link](https://your-username.github.io/
 ## Installation
 
 1. Clone this repository
+
 ```bash
 git clone https://github.com/MRESKY/Simon-Game.git
 ```
