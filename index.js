@@ -14,6 +14,12 @@ class Game {
         }
     });
 
+    document.addEventListener("touchstart", (e) => {
+        this.nextSequence();
+
+        e.preventDefault();
+    }, { passive: false });
+
 
     document.querySelectorAll("button").forEach(button => {
         button.addEventListener("click", (e) => {
@@ -71,6 +77,7 @@ class Game {
 
         this.restartHandler = this.resetGameOnce.bind(this);
         document.addEventListener("keydown", this.restartHandler);
+        document.addEventListener("touchstart", this.restartHandler, { passive: false });
     }
 
     resetGameOnce() {
