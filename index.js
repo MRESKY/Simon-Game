@@ -8,32 +8,42 @@ class Game {
         this.init();
     }
     init() {
+        // Event listener untuk keyboard
+        this.keydownHandler = (e) => {
+            if (!this.gameStarted && (e.key === "a" || e.key === "A")) {
+                this.startGame();
+            } else if (this.gameover) {
+                this.resetGameOnce();
+            }
+        };
+        document.addEventListener("keydown", this.keydownHandler);
 
-    document.addEventListener("keydown", (e) => {
-        if ((e.key === "a" || e.key === "A") && !this.gameStarted) {
-            this.startGame();
-        }
-    });
+        // Event listener untuk touch (mobile)
+        this.touchHandler = (e) => {
+            // Cek jika touch bukan pada button game
+            if (e.target.tagName !== 'BUTTON' || !e.target.hasAttribute('data-color')) {
+                if (!this.gameStarted && !this.gameover) {
+                    this.startGame();
+                    e.preventDefault();
+                } else if (this.gameover) {
+                    this.resetGameOnce();
+                    e.preventDefault();
+                }
+            }
+        };
+        document.addEventListener("touchstart", this.touchHandler, { passive: false });
 
-    // Touch start untuk memulai game (hanya sekali)
-    document.addEventListener("touchstart", (e) => {
-        if (!this.gameStarted && e.target.tagName !== 'BUTTON') {
-            this.startGame();
-            e.preventDefault();
-        }
-    }, { passive: false });
-
-
-    document.querySelectorAll("button").forEach(button => {
-        button.addEventListener("click", (e) => {
-            if (this.gameover) return;
-            const userChosenColor = e.target.getAttribute("data-color");
-            this.userClickedPattern.push(userChosenColor);
-            this.animatedPress(userChosenColor);
-            this.soundbutton(userChosenColor);
-            this.checkAnswer(this.userClickedPattern.length - 1);
+        // Event listener untuk button clicks
+        document.querySelectorAll("button").forEach(button => {
+            button.addEventListener("click", (e) => {
+                if (this.gameover || !this.gameStarted) return;
+                const userChosenColor = e.target.getAttribute("data-color");
+                this.userClickedPattern.push(userChosenColor);
+                this.animatedPress(userChosenColor);
+                this.soundbutton(userChosenColor);
+                this.checkAnswer(this.userClickedPattern.length - 1);
+            });
         });
-    });
     }
 
     startGame() {
@@ -83,11 +93,7 @@ class Game {
         this.gameover = true;
         const audio = new Audio("sounds/wrong.mp3");
         audio.play();
-        document.getElementsByTagName("h1")[0].textContent = "Game Over, Press Any Key to Restart";
-
-        this.restartHandler = this.resetGameOnce.bind(this);
-        document.addEventListener("keydown", this.restartHandler);
-        document.addEventListener("touchstart", this.restartHandler, { passive: false });
+        document.getElementsByTagName("h1")[0].textContent = "Game Over, Touch Screen to Restart";
     }
 
     resetGameOnce() {
@@ -97,9 +103,6 @@ class Game {
         this.gameStarted = false;
 
         document.getElementsByTagName("h1")[0].textContent = "Touch Screen or Press A to Start";
-
-        document.removeEventListener("keydown", this.restartHandler);
-        document.removeEventListener("touchstart", this.restartHandler);
     }
 }
 

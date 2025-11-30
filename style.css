@@ -1,6 +1,9 @@
 body {
     text-align: center;
     background-color: #000000;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 h1 {
