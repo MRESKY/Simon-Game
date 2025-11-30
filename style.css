@@ -4,13 +4,44 @@ body {
     touch-action: manipulation;
     -webkit-user-select: none;
     user-select: none;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.game-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
 }
 
 h1 {
     color: #FEF2BF;
     font-family: 'Press Start 2P', cursive;
-    font-size: 3rem;
-    margin: 5%;
+    font-size: 2.5rem;
+    margin: 20px;
+}
+
+.instructions {
+    color: #FEF2BF;
+    font-family: Arial, sans-serif;
+    font-size: 1rem;
+    margin-bottom: 30px;
+    opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    .instructions {
+        font-size: 0.9rem;
+    }
 }
 
 .container, .container {
